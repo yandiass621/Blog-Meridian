@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../style/login.css">
+    
+    <title>Login</title>
+</head>
+<body>
+    <main>
+
+        <div class="logo">
+            <h1>Meridian</h1>
+            <p>Blog</p>
+        </div>
+
+        <div class="login-card">
+            <div class="card-header">
+                <h2>Acessar painel</h2>
+                <p>Somente administradores autorizados.</p>
+            </div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input id="email" name="email" type="email" placeholder="ana@meridian.blog" required>
+                    <div class="password-container">
+                        <label for="Senha">Senha</label>
+                        <input  id="password" name="password" type="password" placeholder="••••••••" required>
+                        <button id="toggle-password" type="button">
+                            <img src="../image/olho-vermelho.png" alt="Oculta/Visualizar Senha">
+                        </button>
+                    </div>
+                </div>
+                <div class="enter">
+                    <button type="submit">Entrar</button>
+                </div>
+                <p id="access-message" role="status"></p>
+            </form>
+            <div class="reset">
+                 <a href="reset-password.html">Esqueci minha senha</a>
+            </div>
+        </div>
+        <footer>
+            <div class="back-signal">
+                <a href="home.html"><p>← Voltar ao site</p></a>
+            </div>
+        </footer>
+    </main>
+    <script src="../script/login.js"></script>
+</body>
+</html>
+
+<!-- <img src="../image/olho.png" alt="visualizar">: Obs: os dois pontos "../" faz com que eu force o código a sair da pasta page para buscar em outras -->
