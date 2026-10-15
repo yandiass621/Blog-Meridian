@@ -22,8 +22,10 @@ app.use(
         secret: sessionSecret,
         resave: false,
         saveUninitialized: false,
+        rolling: true,
         cookie:{
-            maxAge: 1000 * 60 * 60,
+            maxAge: 1000 * 60 * 30,
+            httpOnly: true
         },
     }),
 );
