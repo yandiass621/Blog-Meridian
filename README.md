@@ -1,94 +1,175 @@
-# API de acesso por e-mail — TypeScript do zero
+# Meridian Blog API
 
-Esta é uma API pequena: ela recebe um e-mail e responde se a pessoa pode entrar em uma página.
+API desenvolvida para o **Meridian Blog**, um projeto de blog com uma área administrativa destinada ao gerenciamento e à visualização de artigos.
 
-## 1. O que é uma API?
+O projeto utiliza Node.js, Express e TypeScript no backend, com autenticação baseada em sessões para controlar o acesso às páginas e aos recursos administrativos.
 
-Uma API é uma porta de comunicação entre o site e o servidor. O site envia uma **requisição**, e a API devolve uma **resposta**.
+## 🎯 Objetivo do projeto
 
-Neste projeto, o site enviará:
+Desenvolver uma aplicação web com uma API própria, integrando o frontend ao backend e implementando mecanismos de autenticação e proteção de conteúdo.
 
-```json
-{ "email": "voce@exemplo.com" }
+O projeto também tem como objetivo colocar em prática conceitos de desenvolvimento web, organização de rotas, gerenciamento de sessões, integração entre frontend e backend e tratamento de requisições HTTP.
+
+## 🚀 Tecnologias utilizadas
+
+- **Node.js** — ambiente de execução JavaScript.
+- **TypeScript** — tipagem estática para JavaScript.
+- **Express** — criação do servidor HTTP e gerenciamento de rotas.
+- **express-session** — gerenciamento de sessões de usuários.
+- **dotenv** — carregamento de variáveis de ambiente.
+- **HTML, CSS e JavaScript** — construção e funcionamento da interface web.
+- **Git e GitHub** — versionamento e publicação do código-fonte.
+
+## ⚙️ Funcionalidades
+
+- Estruturação de uma API utilizando Express e TypeScript.
+- Sistema de acesso à área administrativa.
+- Verificação de autorização por meio de sessão.
+- Proteção da página de visualização de artigos.
+- Disponibilização de rotas específicas para autenticação e artigos.
+- Integração entre páginas do frontend e endpoints da API.
+- Configuração de variáveis de ambiente para proteger informações sensíveis.
+
+## 📁 Estrutura do projeto
+
+A estrutura abaixo representa os principais arquivos e diretórios identificados durante o desenvolvimento. Ajuste os caminhos caso a organização atual do repositório seja diferente.
+
+```text
+Meridian-Blog/
+├── src/
+│   ├── routes/
+│   │   ├── access.ts
+│   │   └── articles.ts
+│   └── server.ts
+├── pages/
+│   ├── login.html
+│   └── article.html
+├── style/
+├── script/
+├── image/
+├── .env
+├── .gitignore
+├── package.json
+├── package-lock.json
+└── tsconfig.json
 ```
 
-E a API responderá:
+### Organização dos arquivos
 
-```json
-{ "email": "voce@exemplo.com", "hasAccess": true }
+- `src/server.ts`: inicialização do servidor, configuração do Express, sessões, arquivos estáticos e middleware de autenticação.
+- `src/routes/access.ts`: rotas relacionadas ao controle de acesso.
+- `src/routes/articles.ts`: rotas relacionadas aos artigos.
+- `pages/login.html`: página de acesso à área administrativa.
+- `pages/article.html`: página de visualização de artigos.
+- `style/`: arquivos de estilização.
+- `script/`: scripts JavaScript do frontend.
+- `image/`: imagens utilizadas no projeto.
+- `.env`: variáveis de ambiente locais.
+- `tsconfig.json`: configurações do compilador TypeScript.
+
+## 🔐 Autenticação e controle de acesso
+
+O backend utiliza o pacote `express-session` para manter informações de autenticação entre requisições.
+
+O middleware `requireAccess` verifica a existência da propriedade `authorizedEmail` na sessão. Caso o usuário não esteja autorizado, a aplicação redireciona a requisição para a página de login.
+
+A rota `/pages/article.html` utiliza esse middleware para restringir o acesso à página de visualização dos artigos.
+
+A configuração também utiliza a variável de ambiente `SESSION_SECRET` para assinar a sessão.
+
+## 🔌 Principais rotas
+
+| Método | Endpoint | Finalidade |
+|---|---|---|
+| POST | `/api/access/check` | Verificação de acesso à área administrativa. |
+| GET | `/api/articles/:id` | Consulta de um artigo pelo identificador. |
+| GET | `/pages/article.html` | Página de visualização de artigos, protegida por autenticação. |
+| GET | `/pages/login.html` | Página de login. |
+
+**Observação:** os endpoints e seus comportamentos devem corresponder à implementação atual dos arquivos de rotas. A proteção da página HTML, por si só, não garante que todos os endpoints da API estejam protegidos.
+
+## 🛠️ Instalação e execução
+
+### 1. Pré-requisitos
+
+- Node.js instalado.
+- npm instalado.
+- Git instalado, caso deseje clonar o repositório.
+
+### 2. Clone o repositório
+
+```bash
+git clone URL_DO_SEU_REPOSITORIO
+cd Meridian-Blog
 ```
 
-`hasAccess` será `true` para quem está autorizado e `false` para os demais.
+Substitua `URL_DO_SEU_REPOSITORIO` pelo endereço real do repositório.
 
-## 2. Arquivos importantes
+### 3. Instale as dependências
 
-```
-src/
-├── server.ts              # Liga e configura o servidor
-├── data/allowedEmails.ts  # Lista de e-mails que têm acesso
-└── routes/access.ts       # Regra da rota de verificação
-```
-
-O TypeScript é JavaScript com tipos. Por exemplo, `email: string` diz que `email` deve ser texto. Isso encontra vários erros antes de a API ser usada.
-
-## 3. Instalar e iniciar
-
-No terminal, dentro desta pasta, rode uma vez:
-
-```powershell
+```bash
 npm install
 ```
 
-Crie seu arquivo de configuração a partir do exemplo:
+### 4. Configure as variáveis de ambiente
 
-```powershell
-Copy-Item .env.example .env
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+SESSION_SECRET=coloque_um_segredo_forte_aqui
 ```
 
-Depois inicie o servidor:
+Utilize um segredo forte e exclusivo para o ambiente. Não compartilhe nem publique esse valor no GitHub.
 
-```powershell
+### 5. Inicie o servidor em desenvolvimento
+
+```bash
 npm run dev
 ```
 
-Quando aparecer `API disponível em http://localhost:3000`, ela está pronta.
+Com a configuração atual, o servidor utiliza a porta `3000` e fica disponível localmente em:
 
-## 4. Dar acesso a alguém
+`http://localhost:3000`
 
-Abra `src/data/allowedEmails.ts` e acrescente o e-mail na lista:
+### 6. Compile o projeto
 
-```ts
-export const allowedEmails = [
-  'voce@exemplo.com',
-  'novo-cliente@exemplo.com',
-];
+Para verificar a compilação do TypeScript:
+
+```bash
+npm run build
 ```
 
-Salve o arquivo. O servidor em desenvolvimento reinicia automaticamente.
+Os comandos acima dependem dos scripts definidos no `package.json`.
 
-## 5. Testar a rota
+## 🌐 Integração com o frontend
 
-Com o servidor rodando, abra outro terminal e envie:
+O frontend se comunica com o backend por meio de requisições HTTP para as rotas de autenticação e artigos.
 
-```powershell
-Invoke-RestMethod -Method Post `
-  -Uri http://localhost:3000/api/access/check `
-  -ContentType 'application/json' `
-  -Body '{"email":"voce@exemplo.com"}'
-```
+O fluxo previsto inclui a verificação do acesso administrativo, a manutenção da sessão e a solicitação de artigos pelo identificador.
 
-Troque o e-mail por um que não esteja na lista para ver `hasAccess: false`.
+A navegação para um artigo utiliza uma URL no formato:
 
-## 6. Entendendo a rota
+`/pages/article.html?id=1`
 
-A rota é `POST /api/access/check`:
+O identificador deve ser utilizado pelo frontend para consultar o artigo correspondente na API.
 
-- `POST` envia um dado para a API.
-- `/api/access` é o endereço base definido em `server.ts`.
-- `/check` é a parte definida em `routes/access.ts`.
-- `express.json()` lê o JSON enviado pelo site.
-- A função normaliza o e-mail, removendo espaços e transformando-o em minúsculas antes de compará-lo.
+## 🔒 Boas práticas de segurança
 
-## Próxima evolução
+- Não publicar o arquivo `.env` nem credenciais no repositório.
+- Utilizar sessões com configurações de cookies adequadas ao ambiente de hospedagem.
+- Validar os dados recebidos pela API.
+- Proteger os endpoints administrativos, não apenas as páginas HTML.
+- Utilizar HTTPS em produção.
+- Configurar corretamente as opções de cookies e a política de sessão conforme o ambiente de implantação.
 
-Esta primeira versão guarda e-mails no código, ideal para aprender e testar. Para uso real, o próximo passo é salvar permissões em banco de dados e criar autenticação: consultar um e-mail sozinho não prova quem é a pessoa.
+## 📌 Status do projeto
+
+Projeto em desenvolvimento, com estrutura de servidor, rotas de autenticação e artigos, gerenciamento de sessões e integração com páginas do frontend.
+
+Novas funcionalidades e melhorias podem ser adicionadas conforme a evolução da aplicação.
+
+## 👨‍💻 Autor
+
+**Yan Dias**
+
+Projeto desenvolvido para praticar e consolidar conhecimentos em desenvolvimento web, APIs REST, TypeScript, Node.js, Express e integração entre frontend e backend.
