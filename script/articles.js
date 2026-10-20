@@ -94,6 +94,64 @@ buttonAntigos.addEventListener('click', () => {
 // Ordenação inicial
 ordenarArtigos('recentes');
 
+
+const inputBuscaPrincipal = document.querySelector('.input-search');
+const contadorArtigos = document.querySelector('.result-count');
+
+function filtrarArtigos(termo) {
+    const cards = articlesGrid.querySelectorAll('.article-card');
+    const busca = termo.trim().toLowerCase();
+    let encontrados = 0;
+
+    cards.forEach(card => {
+        const titulo = card.querySelector('h3').textContent;
+        const resumo = card.querySelector('p').textContent;
+
+        const corresponde = `${titulo} ${resumo}`
+            .toLowerCase()
+            .includes(busca);
+
+        card.style.display = corresponde ? '' : 'none';
+
+        if (corresponde) {
+            encontrados++;
+        }
+    });
+
+    if (contadorArtigos) {
+        contadorArtigos.textContent =
+            `${encontrados} ${encontrados === 1 ? 'artigo encontrado' : 'artigos encontrados'}`;
+    }
+}
+
+// Busca na seção "Todos os artigos"
+inputBuscaPrincipal.addEventListener('input', () => {
+    searchInput.value = inputBuscaPrincipal.value;
+    filtrarArtigos(inputBuscaPrincipal.value);
+});
+
+// Busca pelo botão do cabeçalho
+searchAction.addEventListener('click', () => {
+    inputBuscaPrincipal.value = searchInput.value;
+    filtrarArtigos(searchInput.value);
+});
+
+// Permite pesquisar pressionando Enter
+searchInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        inputBuscaPrincipal.value = searchInput.value;
+        filtrarArtigos(searchInput.value);
+    }
+});
+
+// Limpa a busca ao fechar o campo do cabeçalho
+searchClose.addEventListener('click', () => {
+    searchInput.value = '';
+    inputBuscaPrincipal.value = '';
+    filtrarArtigos('');
+});
+
+
 // converterData() transforma a data em um objeto Date que o JavaScript consegue comparar.
 
 
